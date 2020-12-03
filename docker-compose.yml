@@ -1,0 +1,13 @@
+version: '3.2'
+
+services:
+
+# -----------------------------------------------------------
+# Automated test engine - tests the website from 'outside'
+# -----------------------------------------------------------
+
+  robot:
+    build:
+      context: .
+      args:
+        - "https_proxy=${HTTPS_PROXY}"
