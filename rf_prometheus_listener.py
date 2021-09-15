@@ -38,4 +38,7 @@ def end_test(test, result):
 
 def close():
     # Push the results somewhere useful...
-    push_to_gateway(PUSH_GATEWAY, job=JOB_NAME, registry=registry)
+    if PUSH_GATEWAY:
+        push_to_gateway(PUSH_GATEWAY, job=JOB_NAME, registry=registry)
+    else:
+        print("WARNING! No Push Gateway set, so no metrics have been published.")
