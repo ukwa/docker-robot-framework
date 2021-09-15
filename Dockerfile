@@ -1,8 +1,5 @@
-FROM  python:3
-
-# Install Node as robotframework-browser needs it:
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y nodejs
+# Useful base image with Node, Python 3, etc.
+FROM mcr.microsoft.com/playwright:focal
 
 # Install Python dependencies:
 COPY requirements.txt /tmp/requirements.txt
