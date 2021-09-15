@@ -10,4 +10,5 @@ services:
     build:
       context: .
       args:
+        - "http_proxy=${HTTP_PROXY}"
         - "https_proxy=${HTTPS_PROXY}"
