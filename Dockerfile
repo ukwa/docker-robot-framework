@@ -15,10 +15,11 @@ COPY make_profile.py /
 
 # Use an environment variable to ensure some RF options are always set:
 ENV ROBOT_OPTIONS="--listener /rf_prometheus_listener.py --outputdir /results"
+ENV EXTRA_TESTS=""
 
 # Always run robot:
 ENTRYPOINT [ "robot" ]
 
 # CMD used to set test location, can be overridden easily:
-CMD [ "/tests" ]
+CMD [ "/tests", "${EXTRA_TESTS}" ]
 
