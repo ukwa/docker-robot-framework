@@ -32,7 +32,7 @@ Browse EN View A Collection
 Browse CY View Collections
     [Tags]   browse locale cy
     Go To    %{HOST}/cy/ukwa/collection
-    Page Should Contain    Topics
+    Page Should Contain    Pynciau
 
 Browse CY View A Collection
     [Tags]   browse locale cy
