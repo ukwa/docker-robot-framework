@@ -35,7 +35,15 @@ The tests will run, logging progress to the console and writing results to the `
 
 Note that after changing the tests, you do not need to rebuild the container, as they are mounted as a Docker volume. However, if you change the helper scripts (e.g. `rf_prometheus_listener.py` or the dependencies etc.) a `docker-compose build` will be needed.
 
+While we're still using Selenium, after running the tests, use:
+
+    docker-compose stop
+
+to shut down the Selenium service.
+
 ## Running tests without Docker
+
+_n.b. the following does not take into account the Selenium-based tests!_
 
 Using Docker avoids having to install dependencies. If using Docker is not an option, you could set up a Python virtual environment and install `robotframework-requests` and `robotframework-browser`. Then pull in the necessary environment variables (e.g. for `dev`):
 
@@ -50,4 +58,3 @@ Or, if running the full (destructive) test suite (against DEV/BETA only!):
     robot --outputdir ./results ./tests ./tests_destructive
 
 Once the tests have run, the results of the tests will be in the `results` folder. This is very detailed, and the system will capture screenshots when things go wrong, so this can all be very useful for determining the cause of test failure.
-
