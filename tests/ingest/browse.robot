@@ -55,15 +55,7 @@ Log Out Returns To Login
 
 # test that logging out denies access as before to the various services
 
-Wayback Not Logged In Requires Authentication
+Check Log Out Worked
 	&{response}=             HTTP                       %{HOST_NO_AUTH}/act/wayback/ 
-    Should Be Equal As Strings    ${response.status}              401
-
-Notebook Apps Not Logged In Requires Authentication
-	&{response}=             HTTP                       %{HOST_NO_AUTH}/act/nbapps/ 
-    Should Be Equal As Strings    ${response.status}              401
-
-Log Viewer Not Logged In Requires Authentication
-	&{response}=             HTTP                       %{HOST_NO_AUTH}/act/logs/ 
     Should Be Equal As Strings    ${response.status}              401
 
