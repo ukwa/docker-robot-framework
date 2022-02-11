@@ -27,7 +27,7 @@ else
 fi
 
 # Add environ tag to job name for Prometheus metrics:
-export PROMETHEUS_JOB_NAME=access_website_rf_tests_${ENVIRON}
+export PROMETHEUS_JOB_NAME=service_tests_${ENVIRON}
 
 # Set a username variable
 export USER_ID="$(id -u)"
