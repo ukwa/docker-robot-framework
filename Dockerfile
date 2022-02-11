@@ -10,6 +10,7 @@ RUN rfbrowser init
 
 # Copy in the tests and helpers:
 COPY tests /tests
+COPY tests_destructive /tests_destructive
 COPY rf_prometheus_listener.py /
 COPY make_profile.py /
 
