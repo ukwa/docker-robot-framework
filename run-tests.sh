@@ -11,26 +11,15 @@ fi
 
 if [[ ${ENVIRON} == 'dev' ]]; then
 	# Set up the dev.webarchive.org.uk vars
-        source ~/gitlab/ukwa-services-env/access/website/dev.env
-        export HOST=https://dev:${DEV_WEBSITE_PW}@dev.webarchive.org.uk
-        export HOST_NO_AUTH=https://dev.webarchive.org.uk
-        export PUSH_GATEWAY=monitor-pushgateway.dapi.wa.bl.uk:80
+        source ~/gitlab/ukwa-services-env/dev.env
         # We can run the destructive tests here:
         export EXTRA_TESTS="/tests_destructive"
 elif [[ ${ENVIRON} == 'beta' ]]; then
 	# Set up the beta.webarchive.org.uk vars
-        source ~/gitlab/ukwa-services-env/access/website/beta.env
-        export HOST=https://beta.webarchive.org.uk
-        export HOST_NO_AUTH=$HOST
-        export PUSH_GATEWAY=monitor-pushgateway.bapi.wa.bl.uk:80
+        source ~/gitlab/ukwa-services-env/beta.env
 elif [[ ${ENVIRON} == 'prod' ]]; then
 	# Set up the www.webarchive.org.uk vars
-        source ~/gitlab/ukwa-services-env/access/website/prod.env
-        export HOST=https://www.webarchive.org.uk
-        #export HOST=http://website.api.wa.bl.uk
-        #export HOST=http://prod1.n45.wa.bl.uk
-        export HOST_NO_AUTH=$HOST
-        export PUSH_GATEWAY=monitor-pushgateway.api.wa.bl.uk:80
+        source ~/gitlab/ukwa-services-env/prod.env
 else
         export PUSH_GATEWAY=monitor.wa.bl.uk:9091
 	echo "ERROR"
@@ -40,12 +29,13 @@ fi
 # Add environ tag to job name for Prometheus metrics:
 export PROMETHEUS_JOB_NAME=access_website_rf_tests_${ENVIRON}
 
-# Run as current user to avoid reports having inappropriate permissions:
-export UID=`$(id -u)`
+# Set a username variable
+export USER_ID="$(id -u)"
+
 
 # -- Run the tests:
-echo Running tests using UID = $UID, HOST = $HOST
-echo WARNING! Tests will fail if the HOST variable has a trailing slash!
+echo Running tests using USER_ID=$USER_ID, TEST_HOST=$TEST_HOST
+echo WARNING! Tests will fail if the TEST_HOST variable has a trailing slash!
 
 docker-compose run robot 
 

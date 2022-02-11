@@ -12,7 +12,7 @@ services:
       args:
         - "http_proxy=${HTTP_PROXY}"
         - "https_proxy=${HTTPS_PROXY}"
-    user: ${UID}
+    user: "$USER_ID:$USER_ID"
     command: "/tests ${EXTRA_TESTS}"
     environment: 
       - "HOST=${TEST_HOST}"
@@ -21,44 +21,34 @@ services:
       - "PROMETHEUS_JOB_NAME=${PROMETHEUS_JOB_NAME}"
       - "HTTP_PROXY=${HTTP_PROXY}"
       - "HTTPS_PROXY=${HTTPS_PROXY}"
+      - "NO_PROXY=hub"
       - "W3ACT_USERNAME=${W3ACT_USERNAME}"
       - "W3ACT_PASSWORD=${W3ACT_PASSWORD}"
     volumes:
       - ./tests:/tests:ro
       - ./tests_destructive:/tests_destructive:ro
       - ./results:/results:rw
+      # Adding these means we can run as a host user:
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+    depends_on:
+      - hub
+
 
 # -----------------------------------------------------------
-# Selenium tests infrastructure
-# Based on https://github.com/SeleniumHQ/docker-selenium/tree/3.141.59-zirconium#version-3-with-swarm-support
+# Selenium test support
+# See https://github.com/SeleniumHQ/docker-selenium
 # -----------------------------------------------------------
-
-  firefox:
-    image: selenium/node-firefox:3.141.59-zinc
-    volumes:
-      - /dev/shm:/dev/shm
-    environment:
-      - "http_proxy=${HTTP_PROXY}"
-      - "https_proxy=${HTTPS_PROXY}"
-      - "no_proxy=hub"
-      - "HUB_HOST=hub"
-    entrypoint: bash -c 'SE_OPTS="-host $$HOSTNAME" /opt/bin/entry_point.sh'
-
-  chrome:
-    image: selenium/node-chrome:3.141.59-zinc
-    volumes:
-      - /dev/shm:/dev/shm
-    environment:
-      - "http_proxy=${HTTP_PROXY}"
-      - "https_proxy=${HTTPS_PROXY}"
-      - "no_proxy=hub"
-      - "HUB_HOST=hub"
-    entrypoint: bash -c 'SE_OPTS="-host $$HOSTNAME" /opt/bin/entry_point.sh'
 
   hub:
-    image: selenium/hub:3.141.59-zinc
+    image: selenium/standalone-firefox:4.1.2-20220208
+    shm_size: 2gb
     ports:
       - "4444:4444"
-    depends_on:
-      - firefox
-      - chrome
+    environment:
+      - "http_proxy=${HTTP_PROXY}"
+      - "https_proxy=${HTTPS_PROXY}"
+    #  - "no_proxy=hub"
+    #  - "HUB_HOST=hub"
+    #entrypoint: bash -c 'SE_OPTS="-host $$HOSTNAME" /opt/bin/entry_point.sh'
+
