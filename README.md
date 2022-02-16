@@ -58,3 +58,16 @@ Or, if running the full (destructive) test suite (against DEV/BETA only!):
     robot --outputdir ./results ./tests ./tests_destructive
 
 Once the tests have run, the results of the tests will be in the `results` folder. This is very detailed, and the system will capture screenshots when things go wrong, so this can all be very useful for determining the cause of test failure.
+
+
+## Pa11y Integration
+
+This test suite includes support for evaluating accessibility via [pa11y](https://github.com/pa11y/pa11y), which cannot cover all aspects of accessibility but should help pick up any major problems.
+
+It can be run manually, like this:
+
+```bash
+docker-compose run --entrypoint pa11y robot --reporter html --include-warnings https://www.webarchive.org.uk/ > results/pa11y.html
+```
+
+But to make this more useful we use a simple integration with the Robot Framework, so that the results for multiple pages can be gathered into a single report.

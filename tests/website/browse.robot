@@ -20,22 +20,22 @@ Browse View A Collection
     Page Should Contain    Blogs
 
 Browse EN View Collections
-    [Tags]   browse locale en
+    [Tags]   browse    locale    en
     Go To    %{HOST}/en/ukwa/collection
     Page Should Contain    Topics
 
 Browse EN View A Collection
-    [Tags]   browse locale en
+    [Tags]   browse    locale    en
     Go To    %{HOST}/en/ukwa/collection/44
     Page Should Contain    Blogs
 
 Browse CY View Collections
-    [Tags]   browse locale cy
+    [Tags]   browse    locale    cy
     Go To    %{HOST}/cy/ukwa/collection
     Page Should Contain    Pynciau
 
 Browse CY View A Collection
-    [Tags]   browse locale cy
+    [Tags]   browse    locale    cy
     Go To    %{HOST}/cy/ukwa/collection/44
     Page Should Contain    Blogs
 
