@@ -32,6 +32,10 @@ export PROMETHEUS_JOB_NAME=service_tests_${ENVIRON}
 # Set a username variable
 export USER_ID="$(id -u)"
 
+# -- Build the image:
+echo Building test image to ensure everything is up to date...
+
+docker-compose build robot
 
 # -- Run the tests:
 echo Running tests using USER_ID=$USER_ID, TEST_HOST=$TEST_HOST

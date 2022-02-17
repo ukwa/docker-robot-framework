@@ -1,3 +1,4 @@
+import os
 import json
 import subprocess
 from robot.libraries.BuiltIn import BuiltIn
@@ -30,6 +31,9 @@ class Pa11yLibrary():
         self.counter += 1
         screen_rel = f'pa11y-screenshot-{self.counter}.png'
         screen = f'{self.output_dir}/{screen_rel}'
+        # Remove file if it already exists:
+        if os.path.exists(screen):
+                os.remove(screen)
 
         # Run the command:
         logger.info(f"Running Pa11y on {url}...")
