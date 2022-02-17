@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -a # automatically export all variables e.g. when sourcing env files
 
