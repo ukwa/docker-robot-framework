@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 set -a # automatically export all variables e.g. when sourcing env files
 
-# read script environ argument
-ENVIRON=$1
+ENVIRON=$1 # dev/beta/prod specified in run
+ENV_DIR="${ENV_DIR:-${HOME}/gitlab/ukwa-services-env}" # where the files containing env vars are stored
+
 if ! [[ ${ENVIRON} =~ dev|beta|prod ]]; then
         echo "ERROR: Script $0 requires environment argument (dev|beta|prod)"
         exit
@@ -11,15 +12,15 @@ fi
 
 if [[ ${ENVIRON} == 'dev' ]]; then
 	# Set up the dev.webarchive.org.uk vars
-        source ~/gitlab/ukwa-services-env/dev.env
+        source ${ENV_DIR}/dev.env
         # We can run the destructive tests here:
         export EXTRA_TESTS="/tests_destructive"
 elif [[ ${ENVIRON} == 'beta' ]]; then
 	# Set up the beta.webarchive.org.uk vars
-        source ~/gitlab/ukwa-services-env/beta.env
+        source ${ENV_DIR}/beta.env
 elif [[ ${ENVIRON} == 'prod' ]]; then
 	# Set up the www.webarchive.org.uk vars
-        source ~/gitlab/ukwa-services-env/prod.env
+        source ${ENV_DIR}/prod.env
 else
         export PUSH_GATEWAY=monitor.wa.bl.uk:9091
 	echo "ERROR"
