@@ -1,5 +1,7 @@
 # docker-robot-framework
+
 A Dockerised Robot Framework execution environment, including dependencies and tests for the UK Web Archive services.
+
 
 ## Overall strategy
 
@@ -16,6 +18,7 @@ Wherever possible, these tests should be written to run safely on the live, prod
 It is also designed to be run against near-production versions by changing the `TEST_HOST` environment variable, so that it can be used to verify that a new version of a service passes the tests ahead of deployment to production. A summary of the results is send to the relevant Prometheus Push Gateway for monitoring (note that the `dev` monitoring services is not always running, so the script may log an error after the tests have run).
 
 The build/test/deploy system uses Docker, to ensure the additional libraries to run web browsers and talks to Prometheus are in place.  Specifically, the container includes [RequestsLibrary](https://marketsquare.github.io/robotframework-requests/doc/RequestsLibrary.html) for testing APIs, and the [robotframework-browser](https://robotframework-browser.org/) library (based on [Playwright](https://playwright.dev/)) and  [SeleniumLibrary](http://robotframework.org/SeleniumLibrary/) for browser-driven tests. The Playwright-based library is a bit simpler to deploy than the Selenium-based on, so tests will be switched over to the former eventually.
+
 
 ## How to build and run these tests
 
@@ -40,6 +43,7 @@ While we're still using Selenium, after running the tests, use:
     docker-compose stop
 
 to shut down the Selenium service.
+
 
 ## Running tests without Docker
 
@@ -71,3 +75,4 @@ docker-compose run --entrypoint pa11y robot --reporter html --include-warnings h
 ```
 
 But to make this more useful we use a simple integration with the Robot Framework, so that the results for multiple pages can be gathered into a single report.
+
