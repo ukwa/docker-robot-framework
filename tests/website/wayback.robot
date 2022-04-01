@@ -21,13 +21,13 @@ Check Wayback CY Home Page
 
 Check Wayback EN Replay Page
     [Tags]  wayback    locale    en
-    Go To    %{HOST}/wayback/en/archive/2018/https://www.bl.uk/
+    Go To    %{HOST}/wayback/en/archive/20160101000000/https://www.bl.uk/
     Wait Until Page Contains    Language:    timeout=10s
     Page Should Contain    Back to Calendar
 
 Check Wayback CY Replay Page
     [Tags]  wayback    locale    cy
-    Go To    %{HOST}/wayback/cy/archive/2018/https://www.bl.uk
+    Go To    %{HOST}/wayback/cy/archive/20160101000000/https://www.bl.uk
     Wait Until Page Contains    Iaith:    timeout=10s
     Page Should Contain    Dychwelyd i'r Calendr
 
