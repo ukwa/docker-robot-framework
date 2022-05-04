@@ -1,9 +1,9 @@
 # Useful base image with Node, Python 3, etc.
-FROM mcr.microsoft.com/playwright:focal
+FROM mcr.microsoft.com/playwright/python:focal
 
 # Install Python dependencies:
 COPY requirements.txt /tmp/requirements.txt
-RUN  pip install -r /tmp/requirements.txt
+RUN  python -m pip install -r /tmp/requirements.txt
 
 # Install additional requirements for robotframework-browser:
 RUN rfbrowser init
