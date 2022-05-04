@@ -1,13 +1,16 @@
 *** Settings ***
 Documentation     Verify behaviour of the Wayback archival website playback service.
 Resource          _resource.robot
-Suite setup       Run Keywords    Reset Browsers
-Suite teardown    Run Keywords    Close All Browsers
+
+# Set up a browser context for this whole sequence of tests:
+Suite Setup     Setup Browser
 
 
 *** Test Cases ***
-Open Browser
-    Open Browser To Home Page
+Open Homepage
+    [Tags]  homepage
+    New Page    %{HOST}
+    Page Should Contain    What we do
 
 Check Wayback EN Home Page
     [Tags]  wayback    locale    en
@@ -22,13 +25,13 @@ Check Wayback CY Home Page
 Check Wayback EN Replay Page
     [Tags]  wayback    locale    en
     Go To    %{HOST}/wayback/en/archive/20160101000000/https://www.bl.uk/
-    Wait Until Page Contains    Language:    timeout=10s
+    Page Should Contain    Language:
     Page Should Contain    Back to Calendar
 
 Check Wayback CY Replay Page
     [Tags]  wayback    locale    cy
     Go To    %{HOST}/wayback/cy/archive/20160101000000/https://www.bl.uk
-    Wait Until Page Contains    Iaith:    timeout=10s
+    Page Should Contain    Iaith:
     Page Should Contain    Dychwelyd i'r Calendr
 
 Check Wayback Open Access

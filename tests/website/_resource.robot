@@ -3,26 +3,38 @@ Documentation     A resource file with reusable keywords and variables.
 ...
 ...               The system specific keywords created here form our own
 ...               domain specific language. They utilize keywords provided
-...               by the imported SeleniumLibrary.
-Library           SeleniumLibrary
-Library           /make_profile.py
+...               by the imported browser library
+Library           Browser    auto_closing_level=SUITE
 Library           RequestsLibrary
 Library           OperatingSystem
-
-*** Variables ***
-${SELENIUM}          http://hub:4444/wd/hub
-${BROWSER}           Firefox
-${DELAY}             0
 
 
 *** Keywords ***
 
-# Browser Reset for each Test Suite
-Reset Browsers
-    Set Selenium Speed    ${DELAY}
-    Log To Console    Waiting for ${BROWSER} browser startup
-    Sleep     10s     Wait for browser startup
-    Close All Browsers
+Setup Browser
+     Set Browser Timeout     30 seconds
+     New Page    %{HOST}  # HOST includes any web server authentication
+
+# Simulate Selenium Keyword:
+Page Should Contain
+    [Arguments]    ${target}
+    ${src} =    Get Page Source
+    #Log To Console    ${src}
+    Should Contain    ${src}    ${target}
+
+# Simulate Selenium Keyword:
+Page Should Not Contain
+    [Arguments]    ${target}
+    ${src} =    Get Page Source
+    #Log To Console    ${src}
+    Should Not Contain    ${src}    ${target}
+
+# Alternative version that looks for the text of an iframe:
+Iframe Should Contain
+    [Arguments]    ${target}
+    ${src} =    Get Text    //iframe >>> //html
+    #Log To Console    ${src}
+    Should Contain    ${src}    ${target}
 
 
 # Open Browsers
@@ -41,20 +53,22 @@ Open Browser With Proxy
 # Access Checks
 Check Excluded
     [Arguments]    ${url}
-    Go To   ${url}
+    Go To    ${url}
     Page Should Contain    Not Found
 
 Check Blocked
     [Arguments]    ${url}
-    Go To   ${url}
+    Go To    ${url}
     Page Should Contain    Available in Legal Deposit Library Reading Rooms only
 
+# Checks access is allowed (EN language default), and checks there's a playback frame that matches the supplied text:
 Check Allowed
     [Arguments]    ${url}   ${text}
     Go To    ${url}
     Page Should Not Contain    URL Not Found
     Page Should Not Contain    Available in Legal Deposit Library Reading Rooms only
-    Page Should Contain    ${text}
+    Page Should Contain    Back to Calendar
+    Iframe Should Contain    ${text}
 
 
 # Prefer Checks

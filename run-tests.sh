@@ -42,5 +42,6 @@ docker-compose build robot
 echo Running tests using USER_ID=$USER_ID, TEST_HOST=$TEST_HOST
 echo WARNING! Tests will fail if the TEST_HOST variable has a trailing slash!
 
-docker-compose run robot 
+# -- Allow you to specify which tests are run (if no second arg, runs all tests):
+docker-compose run robot $2
 
