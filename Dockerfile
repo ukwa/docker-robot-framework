@@ -1,9 +1,15 @@
-# Useful base image with Node, Python 3, etc.
-FROM mcr.microsoft.com/playwright/python:focal
+# Useful base image with Node, etc.
+FROM mcr.microsoft.com/playwright:focal
+
+# Install Python:
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    # clean apt cache
+    rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies:
 COPY requirements.txt /tmp/requirements.txt
-RUN  python -m pip install -r /tmp/requirements.txt
+RUN  python3 -m pip install -r /tmp/requirements.txt
 
 # Install additional requirements for robotframework-browser:
 RUN rfbrowser init
