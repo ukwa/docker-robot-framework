@@ -21,7 +21,6 @@ services:
       - "PROMETHEUS_JOB_NAME=${PROMETHEUS_JOB_NAME}"
       - "HTTP_PROXY=${HTTP_PROXY}"
       - "HTTPS_PROXY=${HTTPS_PROXY}"
-      - "NO_PROXY=hub"
       - "W3ACT_USERNAME=${W3ACT_USERNAME}"
       - "W3ACT_PASSWORD=${W3ACT_PASSWORD}"
       # URL to use when testing playback/APIs etc.
@@ -33,24 +32,5 @@ services:
       # Adding these means we can run as a host user:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
-    depends_on:
-      - hub
 
-
-# -----------------------------------------------------------
-# Selenium test support
-# See https://github.com/SeleniumHQ/docker-selenium
-# -----------------------------------------------------------
-
-  hub:
-    image: selenium/standalone-firefox:4.1.2-20220208
-    shm_size: 2gb
-    ports:
-      - "4444:4444"
-    environment:
-      - "http_proxy=${HTTP_PROXY}"
-      - "https_proxy=${HTTPS_PROXY}"
-    #  - "no_proxy=hub"
-    #  - "HUB_HOST=hub"
-    #entrypoint: bash -c 'SE_OPTS="-host $$HOSTNAME" /opt/bin/entry_point.sh'
 
