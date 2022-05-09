@@ -1,19 +1,22 @@
 *** Settings ***
 Documentation     Verify basic browse functionality of the UKWA website.
 Resource          _resource.robot
-Suite setup       Run Keywords    Reset Browsers
-Suite teardown    Run Keywords    Close All Browsers
+
+# Set up a browser context for this whole sequence of tests:
+Suite Setup     Setup Browser
 
 
 *** Test Cases ***
-Open Browser
-    Open Browser To Home Page
+Open Homepage
+    [Tags]  homepage
+    New Page    %{HOST}
+    Page Should Contain    What we do
 
 Browse View Collections
     [Tags]   browse 
     Go To    %{HOST}/ukwa/collection
     Page Should Contain    Topics
-
+	
 Browse View A Collection
     [Tags]   browse
     Go To    %{HOST}/ukwa/collection/44
