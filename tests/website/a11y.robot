@@ -26,6 +26,7 @@ EN FAQ                              %{HOST}/en/ukwa/info/faq
 EN Technical information            %{HOST}/en/ukwa/info/technical
 EN Reading Room Only                %{HOST}/en/ukwa/noresults
 EN Error Page                       %{HOST}/en/foobar
+EN Search Page                      %{HOST}/en/ukwa/search?text=test&search_location=full_text
 
 # welsh
 CY Home                             %{HOST}/cy/ukwa/index
@@ -43,7 +44,9 @@ CY Cookie Policy                    %{HOST}/cy/ukwa/info/cookies
 CY FAQ                              %{HOST}/cy/ukwa/info/faq
 CY Technical information            %{HOST}/cy/ukwa/info/technical
 CY Reading Room Only                %{HOST}/cy/ukwa/noresults
-CY Error Page                       %{HOST}/en/foobar
+CY Error Page                       %{HOST}/cy/foobar
+CY Search Page                      %{HOST}/cy/ukwa/search?text=test&search_location=full_text
+
 
 # gaelic
 GD Home                             %{HOST}/gd/ukwa/index
@@ -62,6 +65,7 @@ GD FAQ                              %{HOST}/gd/ukwa/info/faq
 GD Technical information            %{HOST}/gd/ukwa/info/technical
 GD Reading Room Only                %{HOST}/gd/ukwa/noresults
 GD Error Page                       %{HOST}/gd/foobar
+GD Search Page                      %{HOST}/gd/ukwa/search?text=test&search_location=full_text
 
 
 # ----- Wayback ----- #
