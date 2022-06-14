@@ -1,11 +1,21 @@
 
 
+
 *** Settings ***
 Library    Collections
 Library    RequestsLibrary
 Library    String
 
+
+*** Variables ***
+#reading room only/restricted access
+${RRO_URL}           http://bbc.co.uk
+ 
+${TEST_TIMESTAMP}    20130415044640
+
+
 *** Test Cases ***
+
 
 Check the API documentation page is there
     ${response}=    GET  %{HOST}/api  params=query=ciao  expected_status=200
@@ -73,11 +83,11 @@ Query CDX API, Invalid combination
     Should Contain    ${response.text}    IllegalArgumentException
 
 Query Resolve, Valid, Allow Redirects
-    ${response}=    GET    %{HOST}/api/query/resolve/19900101120000/%{TEST_URL}    expected_status=307    allow_redirects=${False}
+    ${response}=    GET    %{HOST}/api/query/resolve/${TEST_TIMESTAMP}/%{TEST_URL}    expected_status=307    allow_redirects=${False}
     Should Contain    ${response.text}    %{TEST_URL}
 
 Query Resolve, Valid
-    ${response}=    GET    %{HOST}/api/query/resolve/19900101120000/%{TEST_URL}    expected_status=200
+    ${response}=    GET    %{HOST}/api/query/resolve/${TEST_TIMESTAMP}/%{TEST_URL}    expected_status=200
     Should Contain    ${response.text}    %{TEST_URL}
 	
 Query Resolve, Invalid Timestamp
@@ -85,7 +95,7 @@ Query Resolve, Invalid Timestamp
     Should Contain    ${response.text}    %{TEST_URL}
 	
 Query Resolve, Invalid URL
-    ${response}=    GET    %{HOST}/api/query/resolve/19900101120000/foobar  expected_status=404
+    ${response}=    GET    %{HOST}/api/query/resolve/${TEST_TIMESTAMP}/foobar  expected_status=404
     Should Contain    ${response.text}    foobar
 	
 Query Resolve, Invalid Timestamp, Allow Redirects
@@ -93,7 +103,7 @@ Query Resolve, Invalid Timestamp, Allow Redirects
     Should Contain    ${response.text}    %{TEST_URL}
 	
 Query Resolve, Invalid URL, Allow Redirects
-    ${response}=    GET    %{HOST}/api/query/resolve/19900101120000/foobar  expected_status=307    allow_redirects=${False}
+    ${response}=    GET    %{HOST}/api/query/resolve/${TEST_TIMESTAMP}/foobar  expected_status=307    allow_redirects=${False}
     Should Contain    ${response.text}    foobar
 	
 Query WARC, Invalid Timestamp
@@ -102,26 +112,26 @@ Query WARC, Invalid Timestamp
     Should Contain    ${response.text}    %{TEST_URL}
 	
 Query WARC, Invalid URL
-    ${response}=    GET    %{HOST}/api/query/warc/19900101120000/foobar  expected_status=404
+    ${response}=    GET    %{HOST}/api/query/warc/${TEST_TIMESTAMP}/foobar  expected_status=404
     Should Contain    ${response.text}    The requested URL was not found on the server
 		
 Query WARC, Valid
-    ${response}=    GET    %{HOST}/api/query/warc/19900101120000/%{TEST_URL}    expected_status=200
+    ${response}=    GET    %{HOST}/api/query/warc/${TEST_TIMESTAMP}/%{TEST_URL}    expected_status=200
     Should Contain    ${response.text}    WARC-Target-URI: %{TEST_URL}
     Should Contain    ${response.text}    %{TEST_URL}
 
 Query IIIF Helper
-    ${response}=    GET    %{HOST}/api/iiif/helper/20130415044640/%{TEST_URL}   expected_status=303    allow_redirects=${False}
+    ${response}=    GET    %{HOST}/api/iiif/helper/${TEST_TIMESTAMP}/%{TEST_URL}   expected_status=303    allow_redirects=${False}
     Should Contain    ${response.text}    urn:pwid:webarchive
 	
 Query IIIF Helper, Redirect
-    ${response}=    GET    %{HOST}/api/iiif/helper/20130415044640/%{TEST_URL}     expected_status=200
+    ${response}=    GET    %{HOST}/api/iiif/helper/${TEST_TIMESTAMP}/%{TEST_URL}     expected_status=200
 	Set Global Variable    ${new_url}    ${response.url} 	
 	${matches}=      Get Regexp Matches       ${new_url}      :\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\dZ:
     Set Global Variable         ${timestamp}         ${matches[0]}
 	
 Query IIIF Helper, Invalid URL
-    ${response}=    GET    %{HOST}/api/iiif/helper/20130415044640/foobar   expected_status=404
+    ${response}=    GET    %{HOST}/api/iiif/helper/${TEST_TIMESTAMP}/foobar   expected_status=404
     Should Contain    ${response.text}    Not Found
 	
 #TODO: Authentication issue on Dev only; presumably similar to the issue requiring HOST/HOST_NO_AUTH split
@@ -135,16 +145,25 @@ Quesry IIF Info From Helper
 Query IIF Info, Invalid URL
     ${response}=    GET    %{HOST}/api/iiif/2/foobar    expected_status=404
     Should Contain    ${response.text}    The requested URL was not found on the server
+
+Query IIIF Helper, Reading Room Only
+    ${response}=    GET    %{HOST}/api/iiif/helper/${TEST_TIMESTAMP}/${RRO_URL}    expected_status=500
+	Should Contain    ${response.text}    HTTP 451: UNAVAILABLE FOR LEGAL REASONS
+	Set Global Variable     ${new_url}    ${response.url} 
+
+Query IIIF Image From Helper, Reading Room Only
+    ${response}=    GET    ${new_url}    expected_status=500
+    Should Contain    ${response.text}    HTTP 451: UNAVAILABLE FOR LEGAL REASONS
+
+Query IIF Info From Helper, Reading Room Only
+    ${response}=    GET    %{HOST}/api/iiif/2/urn:pwid:webarchive.org.uk${timestamp}page:${RRO_URL}/info.json    expected_status=500
+	Should Contain    ${response.text}    HTTP 451: UNAVAILABLE FOR LEGAL REASONS
 	
-Quesry Stats
+Query Stats
     ${response}=    GET    %{HOST}/api/stats/crawl/recent-activity
     Should Contain    ${response.text}    hosts
-	Should Contain    ${response.text}    stats
-	Should Contain    ${response.text}    first_timestamp	
-
-
-
-
-
-
-
+    Should Contain    ${response.text}    stats
+    Should Contain    ${response.text}    first_timestamp	
+    Should Not Contain    ${response.text}    last_timestamp":"null	
+	
+	
