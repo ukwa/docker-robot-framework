@@ -1,3 +1,4 @@
+from logging import warning
 import os
 import json
 import subprocess
@@ -40,18 +41,33 @@ class Pa11yLibrary():
         # e.g. pa11y --reporter json --runner axe --runner htmlcs --include-warnings https://www.webarchive.org.uk/
         p = subprocess.run(['pa11y', '--reporter', 'json', '--runner', 'axe', '--runner', 'htmlcs', '--include-warnings', '--screen-capture', screen, url ], capture_output=True)
 
-        # Include screenshot in report:
-        logger.info(f'<img src="{screen_rel}" style="max-width: 75%;"/>', html=True)
-
         # Record results:
+        report_rel = f'pa11y-report-{self.counter}.json'
+        report_path = f'{self.output_dir}/{report_rel}'
         if p.stdout:
                 results = json.loads(p.stdout)
+                errors = 0
+                warnings = 0
                 for issue in results:
                         if issue['type'] == 'error':
-                                logger.error(json.dumps(issue, indent=4))
+                                errors += 1
                         else:
-                                logger.warn(json.dumps(issue, indent=4))
+                                warnings += 1
 
+                # Write to a file as pretty-printed JSON:
+                with open(report_path, 'w') as outfile:
+                        json.dump(results, outfile, indent=2)
+
+                # Summarize:
+                if errors > 0:
+                        logger.error(f'Pa11y found <a href="{report_rel}">{errors} errors and {warnings} warnings!</a>', html=True)
+                elif warnings > 0:
+                        logger.warn(f'Pa11y found <a href="{report_rel}">{warnings} warnings!</a>', html=True)
+
+        # Include screenshot in report:
+        logger.info(f'Screenshot from just before Pa11y ran: <a title="Screenshot from Pa11y processing." href="{screen_rel}"><img src="{screen_rel}" style="max-width: 50%;"/></a>', html=True)
+
+        # Report overall outcome:
         if p.returncode != 0:
                 if p.stderr:
                         logger.error(p.stderr)
