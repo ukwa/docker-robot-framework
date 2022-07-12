@@ -39,7 +39,8 @@ class Pa11yLibrary():
         # Run the command:
         logger.info(f"Running Pa11y on {url}...")
         # e.g. pa11y --reporter json --runner axe --runner htmlcs --include-warnings https://www.webarchive.org.uk/
-        p = subprocess.run(['pa11y', '--reporter', 'json', '--runner', 'axe', '--runner', 'htmlcs', '--include-warnings', '--screen-capture', screen, url ], capture_output=True)
+        #p = subprocess.run(['pa11y', '--reporter', 'json', '--runner', 'axe', '--runner', 'htmlcs', '--include-warnings', '--screen-capture', screen, url ], capture_output=True)
+        p = subprocess.run(['pa11y', '--reporter', 'json', '--runner', 'axe', '--runner', 'htmlcs', '--screen-capture', screen, url ], capture_output=True)
 
         # Record results:
         report_rel = f'pa11y-report-{self.counter}.json'
@@ -60,7 +61,10 @@ class Pa11yLibrary():
 
                 # Summarize:
                 if errors > 0:
-                        logger.error(f'Pa11y found <a href="{report_rel}">{errors} errors and {warnings} warnings!</a>', html=True)
+                        if warnings > 0:
+                                logger.error(f'Pa11y found <a href="{report_rel}">{errors} errors and {warnings} warnings!</a>', html=True)
+                        else:
+                                logger.error(f'Pa11y found <a href="{report_rel}">{errors} errors!</a>', html=True)
                 elif warnings > 0:
                         logger.warn(f'Pa11y found <a href="{report_rel}">{warnings} warnings!</a>', html=True)
 
