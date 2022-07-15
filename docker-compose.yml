@@ -23,8 +23,8 @@ services:
       - "HTTPS_PROXY=${HTTPS_PROXY}"
       - "W3ACT_USERNAME=${W3ACT_USERNAME}"
       - "W3ACT_PASSWORD=${W3ACT_PASSWORD}"
-      # URL to use when testing playback/APIs etc.
-      - "TEST_URL=http://portico.bl.uk"
+      # Override URL to use when testing playback/APIs etc.
+      #- "TEST_URL=http://portico.bl.uk"
     volumes:
       - ./tests:/tests:ro
       - ./tests_destructive:/tests_destructive:ro
