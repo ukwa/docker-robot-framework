@@ -7,11 +7,6 @@ Suite Setup     Setup Browser
 
 
 *** Test Cases ***
-Open Homepage
-    [Tags]  homepage
-    New Page    %{HOST}
-    Page Should Contain    What we do
-
 Check Wayback EN Home Page
     [Tags]  wayback    locale    en
     Go To    %{HOST}/wayback/en

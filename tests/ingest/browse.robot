@@ -9,7 +9,7 @@ Suite Setup     New Page    %{HOST}  # HOST includes any web server authenticati
 *** Test Cases ***
 	
 W3ACT Not Logged In Requires Authentication # W3ACT authentication; web server already logged in if needed
-    New Page    %{HOST_NO_AUTH}/act/about     # redirects to login
+    Go To    %{HOST_NO_AUTH}/act/about     # redirects to login
 	${test}=    Get URL
     Should Be Equal As Strings     ${test}    %{HOST_NO_AUTH}/act/login
     
@@ -29,7 +29,7 @@ Log Viewer Not Logged In Requires Authentication
     Should Be Equal As Strings    ${response.status}              401
 
 W3ACT Log In
-    New Page    %{HOST}     # not sure why we need to re-init web server auth considering the auto close scope
+    Go To    %{HOST}     # not sure why we need to re-init web server auth considering the auto close scope
     Go To    %{HOST_NO_AUTH}/act/login
     Fill Secret    input#email    %W3ACT_USERNAME
     Fill Secret    input#password    %W3ACT_PASSWORD
