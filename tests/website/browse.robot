@@ -9,7 +9,7 @@ Suite Setup     Setup Browser
 *** Test Cases ***
 Open Homepage
     [Tags]  homepage
-    New Page    %{HOST}
+    Go To    %{HOST}
     Page Should Contain    What we do
 
 Browse View Collections
