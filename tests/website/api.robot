@@ -14,6 +14,8 @@ ${TEST_URL}                 %{TEST_URL=http://portico.bl.uk}
 ${TEST_TIMESTAMP}           %{TEST_TIMESTAMP=19950418155600}
 ${TEST_FULL_TIMESTAMP}      %{TEST_FULL_TIMESTAMP=1995-04-18T15:56:00Z}
 ${TEST_APPROX_TIMESTAMP}    %{TEST_TIMESTAMP=19950101000000}
+${TEST_VALID_COLLECTIONID}    %{TEST_VALID_COLLECTIONID=1}
+${TEST_INVALID_COLLECTIONID}    %{TEST_INVALID_COLLECTIONID=999999}
 
 *** Keywords ***
 
@@ -242,3 +244,16 @@ Query Stats
     Should Not Contain    ${response.text}    last_timestamp":"null	
 	
 	
+# ---------------------------
+# COLLECTIONS
+# --------------------------
+	
+Query Collection API, No Collection ID
+    ${response}=    GET  %{HOST}/download  expected_status=404
+	
+Query Collection API, Valid Collection ID
+    ${response}=    GET  %{HOST}/download/${TEST_VALID_COLLECTIONID}  expected_status=200
+    #${response}=    GET  %{HOST}/download  params=CollectionID=1  expected_status=200
+	
+Query Collection API, Invalid Collection ID
+    ${response}=    GET  %{HOST}/download/${TEST_INVALID_COLLECTIONID}  expected_status=404	
