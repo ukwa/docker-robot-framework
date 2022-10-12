@@ -241,19 +241,18 @@ Query Stats
     Should Contain    ${response.text}    hosts
     Should Contain    ${response.text}    stats
     Should Contain    ${response.text}    first_timestamp	
-    Should Not Contain    ${response.text}    last_timestamp":"null	
-	
-	
+    Should Not Contain    ${response.text}    last_timestamp":"null		
+
+
 # ---------------------------
 # COLLECTIONS
 # --------------------------
-	
+
 Query Collection API, No Collection ID
     ${response}=    GET  %{HOST}/download  expected_status=404
 	
 Query Collection API, Valid Collection ID
     ${response}=    GET  %{HOST}/download/${TEST_VALID_COLLECTIONID}  expected_status=200
-    #${response}=    GET  %{HOST}/download  params=CollectionID=1  expected_status=200
 	
 Query Collection API, Invalid Collection ID
     ${response}=    GET  %{HOST}/download/${TEST_INVALID_COLLECTIONID}  expected_status=404	
